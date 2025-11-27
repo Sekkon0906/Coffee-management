@@ -31,6 +31,10 @@ export default function QualityDashboard() {
         setMetrics((prev) => ({ ...prev, avgProviders }));
       })
       .catch(console.error);
+
+  useEffect(() => {
+    getTopLots(5).then(setTopLots).catch(console.error);
+    getTopProviders(5).then(setTopProviders).catch(console.error);
   }, []);
 
   const handleProviderSelect = (provider) => {
@@ -60,6 +64,10 @@ export default function QualityDashboard() {
       <div className="page-hero">
         <div>
           <p className="eyebrow">Sensorial</p>
+  return (
+    <div className="page">
+      <div className="page-header">
+        <div>
           <h1>Calidad de taza</h1>
           <p className="text-muted">Ranking y seguimiento de evaluaciones sensoriales.</p>
         </div>
@@ -94,6 +102,9 @@ export default function QualityDashboard() {
             <h3>Top lotes recientes</h3>
             <span className="card-subtitle">Haz clic para ver detalle</span>
           </div>
+      <div className="grid-2">
+        <div className="card">
+          <h3>Top lotes recientes</h3>
           <div className="table-responsive">
             <table className="table-simple">
               <thead>
@@ -115,6 +126,7 @@ export default function QualityDashboard() {
                         {lot.is_accepted ? "Aceptado" : "En revisión"}
                       </span>
                     </td>
+                    <td>{lot.is_accepted ? "Aceptado" : "En revisión"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -127,6 +139,7 @@ export default function QualityDashboard() {
             <h3>Top proveedores</h3>
             <span className="card-subtitle">Selecciona para ver histórico</span>
           </div>
+          <h3>Top proveedores</h3>
           <div className="table-responsive">
             <table className="table-simple">
               <thead>

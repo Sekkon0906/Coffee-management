@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { getInventoryMovements, getInventorySummary } from "../api/inventory";
 import { getCoffeeLines } from "../api/adminConfig";
 import { getProviders } from "../api/providers";
+import { useEffect, useState } from "react";
+import { getInventoryMovements, getInventorySummary } from "../api/inventory";
 
 export default function Inventory() {
   const [summary, setSummary] = useState(null);
@@ -17,6 +19,9 @@ export default function Inventory() {
       .then((data) => setProviders(Array.isArray(data?.providers) ? data.providers : []))
       .catch(() => {});
     getCoffeeLines().then((data) => setLines(Array.isArray(data) ? data : [])).catch(() => {});
+
+  useEffect(() => {
+    getInventorySummary().then(setSummary).catch(console.error);
   }, []);
 
   useEffect(() => {
@@ -86,6 +91,19 @@ export default function Inventory() {
           <span className="card-label">Café pergamino</span>
           <span className="card-value">{summary ? formatKg(summary.kg_pergamino_total) : "-"}</span>
           <span className="card-extra">Materia prima en verde</span>
+  return (
+    <div className="page">
+      <div className="page-header">
+        <div>
+          <h1>Inventario</h1>
+          <p className="text-muted">Kardex operativo de movimientos por lote.</p>
+        </div>
+      </div>
+
+      <div className="cards-row">
+        <div className="card metric-card">
+          <span className="card-label">Café pergamino</span>
+          <span className="card-value">{summary ? formatKg(summary.kg_pergamino_total) : "-"}</span>
         </div>
         <div className="card metric-card">
           <span className="card-label">Café trillado</span>
@@ -124,6 +142,14 @@ export default function Inventory() {
           </div>
           <div className="table-responsive">
             <table className="table-simple compact">
+        </div>
+      </div>
+
+      {summary?.empacado_por_tipo_bolsa && (
+        <div className="card">
+          <h3>Empacado por tipo de bolsa</h3>
+          <div className="table-responsive">
+            <table className="table-simple">
               <tbody>
                 {Object.entries(summary.empacado_por_tipo_bolsa).map(([bag, kg]) => (
                   <tr key={bag}>
@@ -141,6 +167,15 @@ export default function Inventory() {
         <div className="card-title-row">
           <h3>Movimientos</h3>
           <span className="card-subtitle">Kardex consolidado</span>
+          <div className="filters-row">
+            <select className="input" onChange={(e) => setFilters((p) => ({ ...p, state: e.target.value || undefined }))}>
+              <option value="">Estado</option>
+              <option value="pergamino">Pergamino</option>
+              <option value="trillado">Trillado</option>
+              <option value="tostado">Tostado</option>
+              <option value="empacado">Empacado</option>
+            </select>
+          </div>
         </div>
         {loading && <p>Cargando movimientos...</p>}
         <div className="table-responsive">
@@ -163,6 +198,7 @@ export default function Inventory() {
                   <td>
                     <span className="chip chip-soft">{m.movement_type}</span>
                   </td>
+                  <td>{m.movement_type}</td>
                   <td className={m.direction === "OUT" ? "text-danger" : "text-success"}>
                     {m.direction === "OUT" ? "-" : "+"}
                     {Number(m.quantity_kg || 0).toFixed(2)} kg

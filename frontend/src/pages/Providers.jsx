@@ -31,6 +31,10 @@ export default function Providers() {
       <div className="page-hero">
         <div>
           <p className="eyebrow">Red de abastecimiento</p>
+  return (
+    <div className="page">
+      <div className="page-header">
+        <div>
           <h1>Proveedores</h1>
           <p className="text-muted">Gestión de fincas y contactos.</p>
         </div>
@@ -46,6 +50,10 @@ export default function Providers() {
           <span className="card-label">Proveedores activos</span>
           <span className="card-value">{kpis.activos ?? "-"}</span>
           <span className="card-extra">Con registros recientes</span>
+      <div className="cards-row">
+        <div className="card metric-card">
+          <span className="card-label">Proveedores activos</span>
+          <span className="card-value">{kpis.activos ?? "-"}</span>
         </div>
         <div className="card metric-card">
           <span className="card-label">Kg comprados 90d</span>
@@ -79,6 +87,12 @@ export default function Providers() {
 
         {loading && <p>Cargando proveedores...</p>}
 
+        </div>
+      </div>
+
+      {loading && <p>Cargando proveedores...</p>}
+
+      <div className="card">
         <div className="table-responsive">
           <table className="table-simple">
             <thead>
@@ -101,6 +115,12 @@ export default function Providers() {
                       <small className="text-muted">{p.contact_name || "Sin contacto"}</small>
                     </div>
                   </td>
+              </tr>
+            </thead>
+            <tbody>
+              {providers.map((p) => (
+                <tr key={p.id}>
+                  <td>{p.name}</td>
                   <td>{p.contact_name || "-"}</td>
                   <td>{p.phone || "-"}</td>
                   <td>{p.email || "-"}</td>
@@ -121,6 +141,7 @@ export default function Providers() {
       {openForm && (
         <ProviderFormPanel open={openForm} onClose={() => setOpenForm(false)} onSaved={() => window.location.reload()} />
       )}
+      {openForm && <ProviderFormPanel open={openForm} onClose={() => setOpenForm(false)} onSaved={() => window.location.reload()} />}
     </div>
   );
 }
