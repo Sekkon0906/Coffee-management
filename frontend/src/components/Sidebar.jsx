@@ -1,67 +1,125 @@
-import { NavLink, useLocation } from "react-router-dom";
-import { useMemo, useState } from "react";
+// src/components/Sidebar.jsx
+import { useEffect, useState } from "react";
 
-const navItems = [
-  { path: "/app/dashboard", label: "Dashboard", icon: "📊" },
-  { path: "/app/analytics", label: "Analytics", icon: "📈" },
-  { path: "/app/team", label: "Team", icon: "👥" },
-  { path: "/app/calendar", label: "Calendario", icon: "📅" },
-  { path: "/app/notifications", label: "Notificaciones", icon: "🔔" },
-  { path: "/app/documents", label: "Documentos", icon: "📄" },
-  { path: "/app/profile", label: "Perfil", icon: "👤" },
+const MENU_SECTIONS = [
+  {
+    id: "general",
+    label: "General",
+    items: [{ id: "resumen", label: "Resumen" }],
+  },
+  {
+    id: "operacion",
+    label: "Operación",
+    items: [
+      { id: "lotes", label: "Lotes de café" },
+      { id: "inventario", label: "Inventario" },
+      { id: "proveedores", label: "Proveedores" },
+    ],
+  },
+  {
+    id: "calidad",
+    label: "Calidad y trazabilidad",
+    items: [
+      { id: "trazabilidad", label: "Trazabilidad" },
+      { id: "calidadTaza", label: "Calidad de taza" },
+      { id: "documentos", label: "Documentos PDF" },
+    ],
+  },
+  {
+    id: "config",
+    label: "Configuración",
+    items: [
+      { id: "equipo", label: "Equipo y roles" },
+      { id: "perfil", label: "Mi perfil" },
+    ],
+  },
 ];
 
-function Sidebar() {
-  const location = useLocation();
-  const [darkMode, setDarkMode] = useState(false);
+export default function Sidebar({
+  open,
+  onToggle,
+  activeSection = "resumen",
+  onChangeSection,
+}) {
+  const [active, setActive] = useState(activeSection);
 
-  const activeIndex = useMemo(
-    () => navItems.findIndex((item) => location.pathname.startsWith(item.path)),
-    [location.pathname]
-  );
+  useEffect(() => {
+    setActive(activeSection);
+  }, [activeSection]);
 
-  const indicatorStyle = {
-    transform: `translateY(${activeIndex * 64}px)`,
+  const user = {
+    nombre: "Cafetería Demo",
+    email: "contacto@cafedemo.com",
   };
 
-  const toggleTheme = () => {
-    setDarkMode((prev) => !prev);
-    document.documentElement.setAttribute(
-      "data-theme",
-      !darkMode ? "dark" : "light"
-    );
+  const inicial = user.nombre?.charAt(0)?.toUpperCase() ?? "C";
+
+  const handleClick = (id) => {
+    setActive(id);
+    onChangeSection?.(id);
   };
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar__inner">
-        {activeIndex >= 0 && (
-          <div className="sidebar__indicator" style={indicatorStyle} />
-        )}
+    <aside
+      className={`sidebar-v2 ${
+        open ? "sidebar-v2--open" : "sidebar-v2--collapsed"
+      }`}
+    >
+      <button
+        className="sidebar-v2__toggle"
+        onClick={onToggle}
+        aria-label="Alternar menú"
+        type="button"
+      >
+        <span />
+        <span />
+        <span />
+      </button>
 
-        <nav className="sidebar__menu">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                "sidebar__item" + (isActive ? " sidebar__item--active" : "")
-              }
-            >
-              <span className="sidebar__icon">{item.icon}</span>
-            </NavLink>
-          ))}
-        </nav>
-
-        <button
-          className="sidebar__item sidebar__item--mode"
-          onClick={toggleTheme}
-        >
-          <span className="sidebar__icon">{darkMode ? "🌙" : "☀️"}</span>
-        </button>
+      <div className="sidebar-v2__profile">
+        <div className="sidebar-v2__avatar">{inicial}</div>
+        <div className="sidebar-v2__user-info">
+          <div className="sidebar-v2__user-name">{user.nombre}</div>
+          <div className="sidebar-v2__user-email">{user.email}</div>
+        </div>
       </div>
+
+      <nav className="sidebar-v2__menu">
+        {MENU_SECTIONS.map((section) => {
+          const sectionIsActive = section.items.some(
+            (item) => item.id === active
+          );
+
+          return (
+            <div
+              key={section.id}
+              className={`sidebar-v2__section ${
+                sectionIsActive ? "active" : ""
+              }`}
+            >
+              <div className="sidebar-v2__section-label">
+                {section.label}
+              </div>
+
+              {section.items.map((item) => (
+                <button
+                  key={item.id}
+                  className={`sidebar-v2__item ${
+                    active === item.id ? "is-active" : ""
+                  }`}
+                  onClick={() => handleClick(item.id)}
+                  type="button"
+                >
+                  <span className="sidebar-v2__item-dot" />
+                  <span className="sidebar-v2__item-label">
+                    {item.label}
+                  </span>
+                </button>
+              ))}
+            </div>
+          );
+        })}
+      </nav>
     </aside>
   );
 }
-
-export default Sidebar;
