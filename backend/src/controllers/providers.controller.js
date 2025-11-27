@@ -4,6 +4,34 @@ const pool = require("../config/db");
 // Por ahora, empresa demo = 1
 const DEFAULT_COMPANY_ID = 1;
 
+async function buildProviderKPIs() {
+  const [[activeRow]] = await pool.query(
+    `SELECT COUNT(*) AS total FROM providers WHERE company_id = ? AND (is_active = 1 OR is_active IS NULL)`,
+    [DEFAULT_COMPANY_ID]
+  );
+
+  const [[kgRow]] = await pool.query(
+    `SELECT COALESCE(SUM(quantity_kg), 0) AS kg_recent
+     FROM lots
+     WHERE company_id = ? AND created_at >= DATE_SUB(NOW(), INTERVAL 90 DAY)`,
+    [DEFAULT_COMPANY_ID]
+  );
+
+  const [[scoreRow]] = await pool.query(
+    `SELECT AVG(lc.total_score) AS avg_score
+     FROM lot_cuppings lc
+     JOIN lots l ON l.id = lc.lot_id
+     WHERE l.company_id = ?`,
+    [DEFAULT_COMPANY_ID]
+  );
+
+  return {
+    activos: activeRow?.total || 0,
+    kg_ultimos_90: Number(kgRow?.kg_recent || 0),
+    puntaje_promedio: Number(scoreRow?.avg_score || 0).toFixed(1),
+  };
+}
+
 // GET /api/providers
 const getProviders = async (req, res) => {
   try {
@@ -23,7 +51,8 @@ const getProviders = async (req, res) => {
        ORDER BY created_at DESC`,
       [DEFAULT_COMPANY_ID]
     );
-    res.json(rows);
+    const kpis = await buildProviderKPIs();
+    res.json({ providers: rows, kpis });
   } catch (err) {
     console.error("Error getProviders:", err);
     res.status(500).json({ message: "Error obteniendo proveedores" });

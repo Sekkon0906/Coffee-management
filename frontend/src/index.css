@@ -819,6 +819,24 @@ input.input {
   font-size: 0.75rem;
 }
 
+.chip-soft {
+  background: #eef2ff;
+  border-color: #e0e7ff;
+  color: #312e81;
+}
+
+.chip-success {
+  background: #dcfce7;
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+.chip-warning {
+  background: #fff7ed;
+  border-color: #fed7aa;
+  color: #9a3412;
+}
+
 .chip-active {
   background: #1d4ed8;
   border-color: #1d4ed8;
@@ -875,6 +893,117 @@ input.input {
   border: 1px solid #e5e7eb;
   padding: 10px 12px;
   font-size: 0.8rem;
+}
+
+/* ===========================
+   NUEVAS PÁGINAS (estilos comunes)
+   =========================== */
+
+.page {
+  padding: 24px 32px 42px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8fafc, #eef2ff 40%, #f8fafc);
+}
+
+.page-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  border-radius: 18px;
+  background: radial-gradient(circle at 20% 20%, #1d4ed8, #0f172a 55%);
+  color: #f8fafc;
+  box-shadow: 0 20px 35px rgba(15, 23, 42, 0.18);
+  margin-bottom: 18px;
+}
+
+.page-hero h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.page-hero .text-muted {
+  color: rgba(248, 250, 252, 0.8);
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.7rem;
+  color: #93c5fd;
+  margin: 0 0 4px;
+}
+
+.cards-row.responsive-four {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.inline-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.grid-2-columns {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.row-active {
+  background: #f8fafc;
+}
+
+.sticky {
+  position: sticky;
+  top: 16px;
+}
+
+.state-pergamino {
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.state-trillado {
+  background: #ecfccb;
+  color: #365314;
+}
+
+.state-tostado {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+.state-empacado {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.inventory-page .card,
+.lots-page .card,
+.providers-page .card,
+.quality-page .card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
 }
 
 /* ===========================
