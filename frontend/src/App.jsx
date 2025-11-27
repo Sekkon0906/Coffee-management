@@ -4,6 +4,10 @@ import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Traceability from "./pages/Traceability";
+import LotsMaster from "./pages/LotsMaster";
+import Inventory from "./pages/Inventory";
+import Providers from "./pages/Providers";
+import QualityDashboard from "./pages/QualityDashboard";
 import "./index.css";
 
 export default function App() {
@@ -17,11 +21,16 @@ export default function App() {
     switch (activeSection) {
       // Todo esto vive dentro del Dashboard principal (con sus tabs internas)
       case "resumen":
-      case "lotes":
-      case "inventario":
-      case "proveedores":
-      case "calidadTaza":
         return <Dashboard activeSection={activeSection} />;
+
+      case "lotes":
+        return <LotsMaster />;
+      case "inventario":
+        return <Inventory />;
+      case "proveedores":
+        return <Providers />;
+      case "calidadTaza":
+        return <QualityDashboard />;
 
       // Página de trazabilidad con timeline + formularios
       case "trazabilidad":

@@ -1,5 +1,9 @@
 // backend/src/controllers/traceability.controller.js
 const pool = require("../config/db");
+const {
+  recordMovement,
+  MOVEMENT_DIRECTIONS,
+} = require("../utils/stockMovements");
 const PDFDocument = require("pdfkit");
 
 // TODO: esto debería venir del token de usuario
@@ -232,6 +236,20 @@ exports.saveIntake = async (req, res) => {
       result = created[0];
     }
 
+    // Registrar movimiento de inventario (ingreso)
+    if (weight_kg) {
+      await recordMovement({
+        companyId,
+        lotId,
+        movementType: "ingreso_materia_prima",
+        relatedEntityType: "lot_intake",
+        relatedEntityId: result?.id,
+        quantityKg: weight_kg,
+        direction: MOVEMENT_DIRECTIONS.IN,
+        notes: observations || null,
+      });
+    }
+
     res.json({ ok: true, data: result });
   } catch (err) {
     console.error("Error saveIntake:", err);
@@ -312,6 +330,32 @@ exports.saveTrilla = async (req, res) => {
         [insert.insertId]
       );
       result = created[0];
+    }
+
+    // Movimientos: salida de pergamino, entrada de trillado
+    if (input_kg) {
+      await recordMovement({
+        companyId,
+        lotId,
+        movementType: "salida_a_proceso",
+        relatedEntityType: "lot_trilling",
+        relatedEntityId: result?.id,
+        quantityKg: input_kg,
+        direction: MOVEMENT_DIRECTIONS.OUT,
+        notes: observations || null,
+      });
+    }
+    if (output_kg) {
+      await recordMovement({
+        companyId,
+        lotId,
+        movementType: "entrada_de_proceso",
+        relatedEntityType: "lot_trilling",
+        relatedEntityId: result?.id,
+        quantityKg: output_kg,
+        direction: MOVEMENT_DIRECTIONS.IN,
+        notes: observations || null,
+      });
     }
 
     res.json({ ok: true, data: result });
@@ -399,6 +443,32 @@ exports.saveTueste = async (req, res) => {
         [insert.insertId]
       );
       result = created[0];
+    }
+
+    // Movimientos: salida de trillado, entrada de tostado
+    if (input_kg) {
+      await recordMovement({
+        companyId,
+        lotId,
+        movementType: "salida_a_proceso",
+        relatedEntityType: "lot_roasting",
+        relatedEntityId: result?.id,
+        quantityKg: input_kg,
+        direction: MOVEMENT_DIRECTIONS.OUT,
+        notes: observations || null,
+      });
+    }
+    if (output_kg) {
+      await recordMovement({
+        companyId,
+        lotId,
+        movementType: "entrada_de_proceso",
+        relatedEntityType: "lot_roasting",
+        relatedEntityId: result?.id,
+        quantityKg: output_kg,
+        direction: MOVEMENT_DIRECTIONS.IN,
+        notes: observations || null,
+      });
     }
 
     res.json({ ok: true, data: result });
@@ -520,6 +590,19 @@ exports.saveEmpaque = async (req, res) => {
       result = created[0];
     }
 
+    if (total_kg) {
+      await recordMovement({
+        companyId,
+        lotId,
+        movementType: "entrada_de_proceso",
+        relatedEntityType: "lot_packaging",
+        relatedEntityId: result?.id,
+        quantityKg: total_kg,
+        direction: MOVEMENT_DIRECTIONS.IN,
+        notes: observations || null,
+      });
+    }
+
     res.json({ ok: true, data: result });
   } catch (err) {
     console.error("Error saveEmpaque:", err);
@@ -586,6 +669,19 @@ exports.saveDespacho = async (req, res) => {
         [insert.insertId]
       );
       result = created[0];
+    }
+
+    if (dispatched_kg) {
+      await recordMovement({
+        companyId,
+        lotId,
+        movementType: "despacho_cliente",
+        relatedEntityType: "lot_dispatch",
+        relatedEntityId: result?.id,
+        quantityKg: dispatched_kg,
+        direction: MOVEMENT_DIRECTIONS.OUT,
+        notes: observations || null,
+      });
     }
 
     res.json({ ok: true, data: result });
