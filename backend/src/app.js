@@ -8,6 +8,9 @@ const dbTestRoutes = require("./routes/dbTest.routes");
 
 const app = express();
 
+const traceabilityRoutes = require("./routes/traceability.routes");
+app.use("/api/traceability", traceabilityRoutes);
+
 app.use(cors());
 app.use(express.json());
 

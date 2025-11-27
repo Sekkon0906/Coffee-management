@@ -2,16 +2,15 @@
 import { useState } from "react";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
-import Documents from "./pages/Documents";
 import Profile from "./pages/Profile";
-import Team from "./pages/Team";
+import Traceability from "./pages/Traceability";
 import "./index.css";
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  // secciones que vienen del Sidebar: resumen, lotes, inventario,
-  // proveedores, trazabilidad, calidadTaza, documentos, equipo, perfil
+  // secciones que vienen del Sidebar:
+  // resumen, lotes, inventario, proveedores, trazabilidad, calidadTaza, perfil
   const [activeSection, setActiveSection] = useState("resumen");
 
   const renderContent = () => {
@@ -21,22 +20,18 @@ export default function App() {
       case "lotes":
       case "inventario":
       case "proveedores":
-      case "trazabilidad":
       case "calidadTaza":
         return <Dashboard activeSection={activeSection} />;
 
-      // Documentos PDF
-      case "documentos":
-        return <Documents />;
-
-      // Equipo y roles
-      case "equipo":
-        return <Team />;
+      // Página de trazabilidad con timeline + formularios
+      case "trazabilidad":
+        return <Traceability />;
 
       // Mi perfil / panel admin
       case "perfil":
         return <Profile />;
 
+      // fallback
       default:
         return <Dashboard activeSection="resumen" />;
     }
@@ -50,7 +45,6 @@ export default function App() {
         activeSection={activeSection}
         onChangeSection={setActiveSection}
       />
-
       <main className="app-main">{renderContent()}</main>
     </div>
   );

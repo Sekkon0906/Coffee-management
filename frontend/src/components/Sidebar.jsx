@@ -22,14 +22,12 @@ const MENU_SECTIONS = [
     items: [
       { id: "trazabilidad", label: "Trazabilidad" },
       { id: "calidadTaza", label: "Calidad de taza" },
-      { id: "documentos", label: "Documentos PDF" },
     ],
   },
   {
     id: "config",
     label: "Configuración",
     items: [
-      { id: "equipo", label: "Equipo y roles" },
       { id: "perfil", label: "Mi perfil" },
     ],
   },

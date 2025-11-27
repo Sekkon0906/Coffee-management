@@ -9,6 +9,7 @@ const app = express();
 const lotsRoutes = require("./routes/lots.routes");
 const providersRoutes = require("./routes/providers.routes");
 const adminConfigRoutes = require("./routes/adminConfig.routes");
+const traceabilityRoutes = require("./routes/traceability.routes"); // <- IMPORTANTE
 
 app.use(cors());
 app.use(express.json());
@@ -22,6 +23,7 @@ app.get("/api/db-test", (req, res) => {
 app.use("/api/lots", lotsRoutes);
 app.use("/api/providers", providersRoutes);
 app.use("/api/admin", adminConfigRoutes);
+app.use("/api/traceability", traceabilityRoutes); // <- AQUÍ SE ENGACHA TODO LO NUEVO
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
