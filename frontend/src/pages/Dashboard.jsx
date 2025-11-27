@@ -29,7 +29,7 @@ function Dashboard({ activeSection = "resumen" }) {
       try {
         setLoadingProviders(true);
         const data = await getProviders();
-        setProviders(Array.isArray(data) ? data : []);
+        setProviders(Array.isArray(data?.providers) ? data.providers : []);
       } catch (e) {
         console.error(e);
       } finally {
