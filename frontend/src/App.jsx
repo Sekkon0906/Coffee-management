@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Traceability from "./pages/Traceability";
+import ProvidersPage from "./pages/Providers"; // ⬅️ importamos la nueva página
 import "./index.css";
 
 export default function App() {
@@ -19,9 +20,12 @@ export default function App() {
       case "resumen":
       case "lotes":
       case "inventario":
-      case "proveedores":
       case "calidadTaza":
         return <Dashboard activeSection={activeSection} />;
+
+      // Proveedores ahora es una página propia con CRUD
+      case "proveedores":
+        return <ProvidersPage />;
 
       // Página de trazabilidad con timeline + formularios
       case "trazabilidad":
