@@ -7,6 +7,7 @@ export default function Providers() {
   const [kpis, setKpis] = useState({});
   const [loading, setLoading] = useState(false);
   const [openForm, setOpenForm] = useState(false);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -19,6 +20,17 @@ export default function Providers() {
       .finally(() => setLoading(false));
   }, []);
 
+  const filteredProviders = providers.filter((p) => {
+    if (!search) return true;
+    const text = `${p.name} ${p.region} ${p.municipality} ${p.contact_name || ""}`.toLowerCase();
+    return text.includes(search.toLowerCase());
+  });
+
+  return (
+    <div className="page providers-page">
+      <div className="page-hero">
+        <div>
+          <p className="eyebrow">Red de abastecimiento</p>
   return (
     <div className="page">
       <div className="page-header">
@@ -33,6 +45,11 @@ export default function Providers() {
         </div>
       </div>
 
+      <div className="cards-row responsive-four">
+        <div className="card metric-card primary">
+          <span className="card-label">Proveedores activos</span>
+          <span className="card-value">{kpis.activos ?? "-"}</span>
+          <span className="card-extra">Con registros recientes</span>
       <div className="cards-row">
         <div className="card metric-card">
           <span className="card-label">Proveedores activos</span>
@@ -41,10 +58,35 @@ export default function Providers() {
         <div className="card metric-card">
           <span className="card-label">Kg comprados 90d</span>
           <span className="card-value">{kpis.kg_ultimos_90 ?? "-"}</span>
+          <span className="card-extra">Ingreso de materia prima</span>
         </div>
         <div className="card metric-card">
           <span className="card-label">Puntaje promedio</span>
           <span className="card-value">{kpis.puntaje_promedio ?? "-"}</span>
+          <span className="card-extra">Calidad histórica</span>
+        </div>
+        <div className="card metric-card">
+          <span className="card-label">Total de registros</span>
+          <span className="card-value">{providers.length}</span>
+          <span className="card-extra">Incluye inactivos</span>
+        </div>
+      </div>
+
+      <div className="card">
+        <div className="card-title-row">
+          <h3>Directorio de proveedores</h3>
+          <div className="filters-row">
+            <input
+              className="input"
+              placeholder="Buscar por nombre, región o contacto"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {loading && <p>Cargando proveedores...</p>}
+
         </div>
       </div>
 
@@ -61,6 +103,18 @@ export default function Providers() {
                 <th>Email</th>
                 <th>Región</th>
                 <th>Municipio</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredProviders.map((p) => (
+                <tr key={p.id}>
+                  <td>
+                    <div className="stacked">
+                      <strong>{p.name}</strong>
+                      <small className="text-muted">{p.contact_name || "Sin contacto"}</small>
+                    </div>
+                  </td>
               </tr>
             </thead>
             <tbody>
@@ -72,6 +126,11 @@ export default function Providers() {
                   <td>{p.email || "-"}</td>
                   <td>{p.region || "-"}</td>
                   <td>{p.municipality || "-"}</td>
+                  <td>
+                    <span className={`chip ${p.is_active === 0 ? "chip-warning" : "chip-success"}`}>
+                      {p.is_active === 0 ? "Inactivo" : "Activo"}
+                    </span>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -79,6 +138,9 @@ export default function Providers() {
         </div>
       </div>
 
+      {openForm && (
+        <ProviderFormPanel open={openForm} onClose={() => setOpenForm(false)} onSaved={() => window.location.reload()} />
+      )}
       {openForm && <ProviderFormPanel open={openForm} onClose={() => setOpenForm(false)} onSaved={() => window.location.reload()} />}
     </div>
   );

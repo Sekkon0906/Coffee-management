@@ -12,6 +12,25 @@ export default function QualityDashboard() {
   const [history, setHistory] = useState([]);
   const [selectedProvider, setSelectedProvider] = useState(null);
   const [selectedCupping, setSelectedCupping] = useState(null);
+  const [metrics, setMetrics] = useState({});
+
+  useEffect(() => {
+    getTopLots(5)
+      .then((data) => {
+        setTopLots(data);
+        const bestScore = data.length > 0 ? Number(data[0].total_score || 0) : 0;
+        const accepted = data.filter((d) => d.is_accepted).length;
+        setMetrics((prev) => ({ ...prev, bestScore, accepted }));
+      })
+      .catch(console.error);
+    getTopProviders(5)
+      .then((data) => {
+        setTopProviders(data);
+        const avgProviders =
+          data.length > 0 ? data.reduce((sum, p) => sum + Number(p.puntaje_promedio || 0), 0) / data.length : 0;
+        setMetrics((prev) => ({ ...prev, avgProviders }));
+      })
+      .catch(console.error);
 
   useEffect(() => {
     getTopLots(5).then(setTopLots).catch(console.error);
@@ -29,6 +48,22 @@ export default function QualityDashboard() {
     getCuppingDetail(cuppingId).then(setSelectedCupping).catch(console.error);
   };
 
+  const parsedAttributes = (() => {
+    if (!selectedCupping?.attributes_json) return {};
+    try {
+      return typeof selectedCupping.attributes_json === "string"
+        ? JSON.parse(selectedCupping.attributes_json)
+        : selectedCupping.attributes_json;
+    } catch (e) {
+      return {};
+    }
+  })();
+
+  return (
+    <div className="page quality-page">
+      <div className="page-hero">
+        <div>
+          <p className="eyebrow">Sensorial</p>
   return (
     <div className="page">
       <div className="page-header">
@@ -38,6 +73,35 @@ export default function QualityDashboard() {
         </div>
       </div>
 
+      <section className="cards-row responsive-four">
+        <div className="card metric-card primary">
+          <span className="card-label">Mejor puntaje</span>
+          <span className="card-value">{metrics.bestScore?.toFixed?.(1) || "-"}</span>
+          <span className="card-extra">Lote top reciente</span>
+        </div>
+        <div className="card metric-card">
+          <span className="card-label">Catas aceptadas</span>
+          <span className="card-value">{metrics.accepted ?? 0}</span>
+          <span className="card-extra">Últimos registros</span>
+        </div>
+        <div className="card metric-card">
+          <span className="card-label">Promedio proveedores</span>
+          <span className="card-value">{metrics.avgProviders?.toFixed?.(1) || "-"}</span>
+          <span className="card-extra">Puntaje promedio</span>
+        </div>
+        <div className="card metric-card">
+          <span className="card-label">Proveedores evaluados</span>
+          <span className="card-value">{topProviders.length}</span>
+          <span className="card-extra">Top ranking</span>
+        </div>
+      </section>
+
+      <div className="grid-2">
+        <div className="card">
+          <div className="card-title-row">
+            <h3>Top lotes recientes</h3>
+            <span className="card-subtitle">Haz clic para ver detalle</span>
+          </div>
       <div className="grid-2">
         <div className="card">
           <h3>Top lotes recientes</h3>
@@ -57,6 +121,11 @@ export default function QualityDashboard() {
                     <td>{lot.lot_code}</td>
                     <td>{lot.provider_name || "-"}</td>
                     <td>{Number(lot.total_score || 0).toFixed(1)}</td>
+                    <td>
+                      <span className={`chip ${lot.is_accepted ? "chip-success" : "chip-warning"}`}>
+                        {lot.is_accepted ? "Aceptado" : "En revisión"}
+                      </span>
+                    </td>
                     <td>{lot.is_accepted ? "Aceptado" : "En revisión"}</td>
                   </tr>
                 ))}
@@ -66,6 +135,10 @@ export default function QualityDashboard() {
         </div>
 
         <div className="card">
+          <div className="card-title-row">
+            <h3>Top proveedores</h3>
+            <span className="card-subtitle">Selecciona para ver histórico</span>
+          </div>
           <h3>Top proveedores</h3>
           <div className="table-responsive">
             <table className="table-simple">
@@ -94,6 +167,7 @@ export default function QualityDashboard() {
         <div className="card">
           <div className="card-title-row">
             <h3>Histórico de {selectedProvider.name}</h3>
+            <span className="card-subtitle">Resultados cronológicos</span>
           </div>
           <div className="table-responsive">
             <table className="table-simple">
@@ -122,12 +196,23 @@ export default function QualityDashboard() {
         <div className="card">
           <div className="card-title-row">
             <h3>Detalle de cata: lote {selectedCupping.lot_code}</h3>
+            <span className="card-subtitle">Evaluado por {selectedCupping.evaluated_by || "no registrado"}</span>
           </div>
           <div className="detail-grid">
             <div className="detail-block">
               <p>Puntaje total: {selectedCupping.total_score}</p>
               <p>Evaluado el: {new Date(selectedCupping.evaluated_at).toLocaleDateString()}</p>
               <p>Notas: {selectedCupping.notes || "Sin notas"}</p>
+            </div>
+            <div className="detail-block">
+              <p className="eyebrow">Criterios sensoriales</p>
+              <div className="pill-row">
+                {Object.entries(parsedAttributes).map(([key, value]) => (
+                  <span key={key} className="chip chip-soft">
+                    {key}: {value}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
