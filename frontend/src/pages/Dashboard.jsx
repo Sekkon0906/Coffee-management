@@ -130,7 +130,7 @@ function Dashboard({ activeSection = "resumen" }) {
                       style={{ height: `${height}%` }}
                     />
                     <span className="bar-label">
-                      {lot.name.length > 12
+                      {lot.name && lot.name.length > 12
                         ? lot.name.slice(0, 12) + "…"
                         : lot.name}
                     </span>

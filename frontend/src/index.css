@@ -894,6 +894,226 @@ input.input {
   padding: 10px 12px;
   font-size: 0.8rem;
 }
+/* ============================================
+   PÁGINA DE PROVEEDORES — ESTILOS GLOBALES
+   ============================================ */
+
+/* Contenedor principal */
+.providers-page {
+  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Sección: Proveedores registrados */
+.providers-header {
+  background: white;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.providers-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.providers-header p {
+  color: #6b7280;
+}
+
+.providers-header .kpi {
+  margin-top: 12px;
+  font-size: 36px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #2563eb, #059669);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Botón de agregar */
+.btn-add-provider {
+  margin-top: 20px;
+  background: #2563eb;
+  padding: 10px 18px;
+  border-radius: 10px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-add-provider:hover {
+  background: #1e40af;
+}
+
+/* Tabla */
+.providers-table-container {
+  background: white;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.providers-table-container h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.providers-table-container p {
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+/* Input de búsqueda */
+.providers-search {
+  margin: 10px 0 20px;
+}
+
+.providers-search input {
+  width: 350px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  transition: 0.2s border;
+}
+
+.providers-search input:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+/* Tabla */
+.providers-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.providers-table thead tr {
+  background: #f3f4f6;
+  text-align: left;
+}
+
+.providers-table th,
+.providers-table td {
+  padding: 12px 10px;
+  font-size: 14px;
+}
+
+.providers-table tbody tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+.providers-table tbody tr:hover {
+  background: #eef2ff;
+}
+
+/* Acciones */
+.table-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.table-actions button {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.btn-edit {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-edit:hover {
+  background: #1d4ed8;
+}
+
+.btn-delete {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #b91c1c;
+}
+
+
+/* Panel lateral */
+.side-panel-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.side-panel {
+  width: 420px;
+  background: #111827;
+  color: white;
+  padding: 24px;
+  overflow-y: auto;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+}
+
+.side-panel h3 {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.side-panel label {
+  display: block;
+  margin-bottom: 6px;
+  color: #d1d5db;
+  font-size: 14px;
+}
+
+.side-panel input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #374151;
+  background: #1f2937;
+  color: white;
+  margin-bottom: 18px;
+  transition: 0.25s;
+}
+
+.side-panel input:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
+.side-panel-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.side-panel-footer button {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.side-panel-footer .btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.side-panel-footer .btn-secondary {
+  background: #6b7280;
+  color: white;
+}
 
 /* ===========================
    NUEVAS PÁGINAS (estilos comunes)

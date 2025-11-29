@@ -1,13 +1,16 @@
 // src/App.jsx
 import { useState } from "react";
 import Sidebar from "./components/Sidebar";
+
 import Dashboard from "./pages/Dashboard";
-import Profile from "./pages/Profile";
-import Traceability from "./pages/Traceability";
 import LotsMaster from "./pages/LotsMaster";
 import Inventory from "./pages/Inventory";
-import Providers from "./pages/Providers";
 import QualityDashboard from "./pages/QualityDashboard";
+
+import Profile from "./pages/Profile";
+import Traceability from "./pages/Traceability";
+import ProvidersPage from "./pages/Providers";
+
 import "./index.css";
 
 export default function App() {
@@ -19,28 +22,27 @@ export default function App() {
 
   const renderContent = () => {
     switch (activeSection) {
-      // Todo esto vive dentro del Dashboard principal (con sus tabs internas)
       case "resumen":
-        return <Dashboard activeSection={activeSection} />;
+        return <Dashboard activeSection="resumen" />;
 
       case "lotes":
         return <LotsMaster />;
+
       case "inventario":
         return <Inventory />;
-      case "proveedores":
-        return <Providers />;
+
       case "calidadTaza":
         return <QualityDashboard />;
 
-      // Página de trazabilidad con timeline + formularios
+      case "proveedores":
+        return <ProvidersPage />;
+
       case "trazabilidad":
         return <Traceability />;
 
-      // Mi perfil / panel admin
       case "perfil":
         return <Profile />;
 
-      // fallback
       default:
         return <Dashboard activeSection="resumen" />;
     }
