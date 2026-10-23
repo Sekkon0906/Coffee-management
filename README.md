@@ -2,6 +2,8 @@
 
 Aplicación web para gestionar la operación de un beneficio o tostadora de café: lotes, proveedores, trazabilidad por etapas del proceso, inventario por movimientos y calidad de taza. Genera fichas PDF de cada etapa.
 
+> **Estado:** propuesta de desarrollo que quedó en fase beta. No se siguió desarrollando; el código muestra hasta dónde llegó la propuesta.
+
 ## Qué es
 
 Un monorepo con dos partes:
@@ -100,7 +102,7 @@ Coffee-management/
 
 ## Estado
 
-En desarrollo. Pendientes conocidos:
+Propuesta de desarrollo en fase beta, sin continuar. Lo que habría faltado para cerrarla:
 
 - `backend/src/index.js` no monta `/api/inventory` ni `/api/quality`, aunque las rutas y los controladores existen. Por eso las pantallas de Inventario y Calidad de taza reciben 404 hasta que se registren.
 - La autenticación (registro y login con JWT y bcrypt) está escrita pero no se monta. Además, `bcryptjs` y `jsonwebtoken` no están en `backend/package.json`.
